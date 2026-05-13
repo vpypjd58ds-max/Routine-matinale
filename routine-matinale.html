@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Routine Matinale · 30 min</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gold: #C8A96E;
+    --blue: #7EB8C9;
+    --green: #A8C97E;
+    --bg: #0e0e0e;
+    --text: #f0ede8;
+    --muted: #888;
+    --faint: #ffffff12;
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HOME ── */
+  #home {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  .home-eyebrow {
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .home-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+  }
+
+  .home-sub {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.7;
+    margin-bottom: 44px;
+  }
+
+  .block-card {
+    background: transparent;
+    border-radius: 4px;
+    padding: 22px 24px;
+    margin-bottom: 14px;
+    cursor: pointer;
+    text-align: left;
+    width: 100%;
+    color: var(--text);
+    transition: transform 0.15s, box-shadow 0.15s;
+    border-width: 1px;
+    border-style: solid;
+  }
+  .block-card:active { transform: scale(0.98); }
+
+  .card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .card-num {
+    font-size: 9px;
+    letter-spacing: 3px;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+  }
+
+  .card-icon { font-size: 30px; }
+
+  .card-intro {
+    font-size: 11px;
+    color: #aaa;
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    font-size: 9px;
+    padding: 3px 9px;
+    border-radius: 2px;
+    letter-spacing: 0.5px;
+  }
+
+  .tips-box {
+    margin-top: 44px;
+    padding: 18px 20px;
+    background: #161616;
+    border-radius: 4px;
+    font-size: 11px;
+    color: #666;
+    line-height: 1.8;
+  }
+  .tips-title {
+    color: #aaa;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 10px;
+    letter-spacing: 2px;
+  }
+
+  /* ── BLOCK SCREEN ── */
+  #block-screen { display: none; min-height: 100vh; flex-direction: column; }
+
+  .block-header {
+    padding: 18px 24px 14px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+  }
+
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .timer-label {
+    font-size: 11px;
+    color: #555;
+    letter-spacing: 2px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .progress-bar {
+    height: 2px;
+    background: var(--faint);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 12px;
+  }
+
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 2px;
+    transition: width 1s linear;
+  }
+
+  .block-label-small {
+    font-size: 10px;
+    letter-spacing: 3px;
+  }
+
+  .exercises-list {
+    padding: 16px 24px 80px;
+    max-width: 520px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .block-intro-text {
+    color: #888;
+    font-size: 11px;
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .ex-card {
+    margin-bottom: 10px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #ffffff15;
+    transition: border-color 0.2s, opacity 0.3s;
+  }
+  .ex-card.active { border-color: var(--accent); }
+  .ex-card.done { opacity: 0.45; }
+
+  .ex-header {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 16px 20px;
+    text-align: left;
+    color: var(--text);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'DM Mono', monospace;
+    transition: background 0.2s;
+  }
+  .ex-card.active .ex-header { background: rgba(255,255,255,0.04); }
+
+  .ex-num {
+    font-size: 9px;
+    letter-spacing: 2px;
+    display: block;
+    margin-bottom: 5px;
+    color: var(--accent);
+  }
+
+  .ex-name {
+    font-size: 14px;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+  }
+
+  .ex-sets {
+    font-size: 11px;
+    font-weight: 400;
+    white-space: nowrap;
+    margin-left: 12px;
+    color: var(--accent);
+  }
+
+  .ex-body {
+    display: none;
+    padding: 0 20px 18px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .ex-body.open { display: block; }
+
+  .ex-tip {
+    font-size: 11px;
+    color: #aaa;
+    line-height: 1.7;
+    margin: 14px 0 16px;
+  }
+
+  .ex-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .rest-info {
+    font-size: 10px;
+    color: #555;
+  }
+  .rest-info strong { color: #aaa; }
+
+  .done-btn {
+    border: 1px solid var(--accent);
+    background: var(--accent);
+    color: #000;
+    padding: 8px 18px;
+    font-size: 9px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 700;
+  }
+
+  .next-btn {
+    display: block;
+    margin: 32px auto 0;
+    border: 1px solid var(--accent);
+    background: none;
+    color: var(--accent);
+    padding: 13px 32px;
+    font-size: 10px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+    transition: background 0.2s, color 0.2s;
+  }
+  .next-btn:hover { background: var(--accent); color: #000; }
+
+  /* ── REST OVERLAY ── */
+  #rest-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 200;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  #rest-overlay.show { display: flex; }
+
+  .rest-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .rest-timer {
+    font-family: 'Playfair Display', serif;
+    font-size: 86px;
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 36px;
+    font-variant-numeric: tabular-nums;
+    color: var(--accent);
+  }
+
+  .skip-btn {
+    border: 1px solid var(--accent);
+    background: none;
+    color: var(--accent);
+    padding: 10px 28px;
+    font-size: 10px;
+    letter-spacing: 3px;
+    cursor: pointer;
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in { animation: fadeIn 0.3s ease forwards; }
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div id="home">
+  <p class="home-eyebrow">Routine quotidienne</p>
+  <h1 class="home-title">Matin<br>30 min</h1>
+  <p class="home-sub">Corps complet · Accent sangle abdominale<br>Élastiques · Haltères 6 kg · Banc · Poignées pompes</p>
+
+  <div id="cards-container"></div>
+
+  <div class="tips-box">
+    <span class="tips-title">CONSEILS GÉNÉRAUX</span>
+    · Échauffement léger 2 min (marche sur place, rotations)<br>
+    · Temps de repos entre séries : indiqué sur chaque exercice<br>
+    · Hydratation avant de commencer<br>
+    · Si à jeun : réduire légèrement les séries le temps d'adaptation
+  </div>
+</div>
+
+<!-- BLOCK SCREEN -->
+<div id="block-screen">
+  <div class="block-header" id="block-header">
+    <div class="header-row">
+      <button class="back-btn" onclick="goHome()">← RETOUR</button>
+      <span class="timer-label" id="timer-display">00:00 / 10:00</span>
+    </div>
+    <div class="progress-bar">
+      <div class="progress-fill" id="progress-fill"></div>
+    </div>
+    <span class="block-label-small" id="block-label-small"></span>
+  </div>
+  <div class="exercises-list" id="exercises-list"></div>
+</div>
+
+<!-- REST OVERLAY -->
+<div id="rest-overlay">
+  <p class="rest-label">Récupération</p>
+  <div class="rest-timer" id="rest-timer">00:30</div>
+  <button class="skip-btn" onclick="skipRest()">PASSER →</button>
+</div>
+
+<script>
+const DATA = [
+  {
+    id: 'bas', label: 'BAS DU CORPS', color: '#C8A96E', bg: '#1a1410',
+    borderBg: '#1a1410', duration: 10, icon: '🦵',
+    intro: 'Activer les jambes, les fessiers et la mobilité des hanches. Rythme contrôlé, amplitude complète.',
+    exercises: [
+      { name: 'Flexions profondes (squats)', sets: '3 × 12', tip: 'Descendre jusqu\'à la parallèle, talons au sol. Pause 1 sec en bas.', rest: 30 },
+      { name: 'Fentes alternées avec banc', sets: '2 × 10 par jambe', tip: 'Pied avant sur le banc pour élargir l\'amplitude. Genou arrière frôle le sol.', rest: 30 },
+      { name: 'Élévations latérales de jambe (élastique)', sets: '2 × 15 par jambe', tip: 'Élastique autour des chevilles. Mouvement lent et contrôlé, abducteurs sollicités.', rest: 20 },
+      { name: 'Montées de banc alternées', sets: '2 × 12 par jambe', tip: 'Poussée sur le talon posé sur le banc. Tempo : montée 1s / descente 2s.', rest: 30 },
+      { name: 'Pont fessier au sol', sets: '2 × 15', tip: 'Dos au sol, pieds plats, pousser le bassin vers le plafond. Serrer les fessiers en haut.', rest: 20 },
+    ]
+  },
+  {
+    id: 'haut', label: 'HAUT DU CORPS', color: '#7EB8C9', bg: '#0d1a1f',
+    duration: 10, icon: '💪',
+    intro: 'Pectoraux, épaules, dos et bras. Les poignées de pompes libèrent les poignets et augmentent l\'amplitude.',
+    exercises: [
+      { name: 'Pompes sur poignées (prise normale)', sets: '3 × 10–12', tip: 'Poignées au sol, descente profonde sous la ligne des pecs. Corps gainé.', rest: 30 },
+      { name: 'Pompes surélevées sur banc (prise haute)', sets: '2 × 10', tip: 'Pieds sur le banc, angle ~30°. Charge accrue sur les épaules et le haut des pecs.', rest: 30 },
+      { name: 'Rowing haltères 6 kg (un bras)', sets: '3 × 12 par bras', tip: 'Appui sur le banc, coude tiré vers la hanche. Pause 1s en haut.', rest: 20 },
+      { name: 'Tirage élastique (dos / rhomboïdes)', sets: '2 × 15', tip: 'Élastique fixé ou tenu, tirer les coudes vers l\'arrière. Omoplates à rapprocher.', rest: 20 },
+      { name: 'Curl biceps + extension triceps (élastique)', sets: '2 × 12 chaque', tip: 'Enchaîner les deux sans poser. Élastique moyen, amplitude complète.', rest: 20 },
+    ]
+  },
+  {
+    id: 'gainage', label: 'GAINAGE ABDO', color: '#A8C97E', bg: '#111a0d',
+    duration: 10, icon: '🔥',
+    intro: 'Sangle abdominale, obliques, transverse et lombaires. Qualité de contraction > quantité de répétitions.',
+    exercises: [
+      { name: 'Planche avant (avant-bras)', sets: '3 × 30–45 sec', tip: 'Bassin neutre, ne pas laisser les hanches monter ou descendre. Respiration abdominale.', rest: 20 },
+      { name: 'Planche latérale alternée', sets: '2 × 20 sec par côté', tip: 'Hanches alignées, obliques sous tension constante. Maintenir sans compensation.', rest: 20 },
+      { name: 'Crunchs lents au sol', sets: '3 × 15', tip: 'Montée sur 2s / descente sur 3s. Lombes au sol tout au long. Ne pas tirer la nuque.', rest: 20 },
+      { name: 'Mountain climbers (genoux vers poitrine)', sets: '2 × 20 répétitions', tip: 'Depuis position pompes sur poignées. Rythme modéré, gainage constant.', rest: 20 },
+      { name: 'Relevé de jambes tendu (au sol)', sets: '2 × 12', tip: 'Dos plat, mains sous les fessiers. Descendre lentement sans poser les pieds.', rest: 20 },
+    ]
+  }
+];
+
+// State
+let currentBlock = null;
+let expandedEx = null;
+let totalElapsed = 0;
+let totalInterval = null;
+let restInterval = null;
+let restLeft = 0;
+
+// Build home cards
+const container = document.getElementById('cards-container');
+DATA.forEach((b, i) => {
+  const tagNames = b.exercises.map(e => e.name.split(' ').slice(0,3).join(' '));
+  const card = document.createElement('button');
+  card.className = 'block-card';
+  card.style.background = b.bg;
+  card.style.borderLeft = `3px solid ${b.color}`;
+  card.style.borderTop = `1px solid ${b.color}22`;
+  card.style.borderRight = `1px solid ${b.color}22`;
+  card.style.borderBottom = `1px solid ${b.color}22`;
+  card.innerHTML = `
+    <div class="card-top">
+      <div>
+        <span class="card-num" style="color:${b.color}">0${i+1} · ${b.duration} MIN</span>
+        <span class="card-title">${b.label}</span>
+      </div>
+      <span class="card-icon">${b.icon}</span>
+    </div>
+    <p class="card-intro">${b.intro}</p>
+    <div class="tags">${tagNames.map(t=>`<span class="tag" style="background:${b.color}18;color:${b.color}">${t}</span>`).join('')}</div>
+  `;
+  card.onclick = () => openBlock(i);
+  container.appendChild(card);
+});
+
+function pad(n) { return String(n).padStart(2,'0'); }
+function fmtTime(s) { return `${pad(Math.floor(s/60))}:${pad(s%60)}`; }
+
+function openBlock(i) {
+  currentBlock = i;
+  expandedEx = null;
+  totalElapsed = 0;
+  clearInterval(totalInterval);
+
+  const b = DATA[i];
+  document.documentElement.style.setProperty('--accent', b.color);
+
+  // Header
+  const header = document.getElementById('block-header');
+  header.style.background = b.bg;
+  header.style.borderBottomColor = b.color + '22';
+  document.getElementById('block-label-small').textContent = `${b.icon} ${b.label}`;
+  document.getElementById('block-label-small').style.color = b.color;
+  document.getElementById('progress-fill').style.background = b.color;
+  updateTimerDisplay();
+
+  // Exercises
+  const list = document.getElementById('exercises-list');
+  list.style.background = b.bg;
+  list.innerHTML = `<p class="block-intro-text">${b.intro}</p>`;
+
+  b.exercises.forEach((ex, j) => {
+    const card = document.createElement('div');
+    card.className = 'ex-card';
+    card.id = `ex-${j}`;
+    card.innerHTML = `
+      <button class="ex-header" onclick="toggleEx(${j})">
+        <div>
+          <span class="ex-num">${pad(j+1)}</span>
+          <span class="ex-name">${ex.name}</span>
+        </div>
+        <span class="ex-sets">${ex.sets}</span>
+      </button>
+      <div class="ex-body" id="ex-body-${j}">
+        <p class="ex-tip">💡 ${ex.tip}</p>
+        <div class="ex-actions">
+          <span class="rest-info">Repos recommandé : <strong>${ex.rest}s</strong></span>
+          <button class="done-btn" onclick="serieTerminee(${j})">▶ SÉRIE TERMINÉE</button>
+        </div>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+
+  // Next button
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'next-btn';
+  nextBtn.id = 'next-btn';
+  const isLast = i === DATA.length - 1;
+  nextBtn.textContent = isLast ? '✓ ROUTINE TERMINÉE' : `BLOC SUIVANT — ${DATA[i+1].label} →`;
+  nextBtn.onclick = () => {
+    stopTotal();
+    if (!isLast) openBlock(i + 1);
+    else goHome();
+  };
+  list.appendChild(nextBtn);
+
+  // Show block screen
+  document.getElementById('home').style.display = 'none';
+  const bs = document.getElementById('block-screen');
+  bs.style.display = 'flex';
+  bs.style.background = b.bg;
+
+  // Start total timer
+  totalInterval = setInterval(() => {
+    totalElapsed++;
+    updateTimerDisplay();
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const b = DATA[currentBlock];
+  document.getElementById('timer-display').textContent = `${fmtTime(totalElapsed)} / ${pad(b.duration)}:00`;
+  const pct = Math.min((totalElapsed / (b.duration * 60)) * 100, 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+}
+
+function toggleEx(j) {
+  const body = document.getElementById(`ex-body-${j}`);
+  const card = document.getElementById(`ex-${j}`);
+  if (expandedEx === j) {
+    body.classList.remove('open');
+    card.classList.remove('active');
+    expandedEx = null;
+  } else {
+    if (expandedEx !== null) {
+      document.getElementById(`ex-body-${expandedEx}`).classList.remove('open');
+      document.getElementById(`ex-${expandedEx}`).classList.remove('active');
+    }
+    body.classList.add('open');
+    card.classList.add('active');
+    expandedEx = j;
+  }
+}
+
+function serieTerminee(j) {
+  const b = DATA[currentBlock];
+  const ex = b.exercises[j];
+  document.getElementById(`ex-${j}`).classList.add('done');
+  document.getElementById(`ex-body-${j}`).classList.remove('open');
+  expandedEx = null;
+  startRest(ex.rest);
+}
+
+function startRest(seconds) {
+  restLeft = seconds;
+  document.getElementById('rest-timer').textContent = fmtTime(restLeft);
+  document.getElementById('rest-overlay').classList.add('show');
+  clearInterval(restInterval);
+  restInterval = setInterval(() => {
+    restLeft--;
+    document.getElementById('rest-timer').textContent = fmtTime(restLeft);
+    if (restLeft <= 0) skipRest();
+  }, 1000);
+}
+
+function skipRest() {
+  clearInterval(restInterval);
+  document.getElementById('rest-overlay').classList.remove('show');
+}
+
+function stopTotal() {
+  clearInterval(totalInterval);
+  clearInterval(restInterval);
+}
+
+function goHome() {
+  stopTotal();
+  document.getElementById('rest-overlay').classList.remove('show');
+  document.getElementById('block-screen').style.display = 'none';
+  document.getElementById('home').style.display = 'block';
+  currentBlock = null;
+}
+</script>
+</body>
+</html>
