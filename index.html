@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Routine matinale — mouvement + posture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#E9EEEC;
+    --paper:#F8FAF9;
+    --ink:#16262A;
+    --ink-soft:#4C5C5E;
+    --ink-faint:#7E8D8C;
+    --accent:#2E6E62;
+    --accent-deep:#1F5049;
+    --accent-soft:#D6E4DE;
+    --amber:#A9711F;
+    --amber-soft:#F1E6D0;
+    --line:#C9D5D0;
+    --line-soft:#DCE5E1;
+    --shadow:0 1px 2px rgba(22,38,42,.04),0 8px 30px rgba(22,38,42,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:"Inter",system-ui,sans-serif;
+    line-height:1.55;
+    padding:clamp(18px,5vw,64px) clamp(14px,4vw,32px) 80px;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:720px;margin:0 auto}
+
+  /* ---------- HERO ---------- */
+  .hero{margin-bottom:clamp(30px,6vw,54px)}
+  .eyebrow{
+    font-family:"JetBrains Mono",monospace;
+    font-size:12px;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--accent);font-weight:500;margin-bottom:14px;
+  }
+  h1{
+    font-family:"Fraunces",serif;
+    font-weight:500;
+    font-size:clamp(38px,10vw,66px);
+    line-height:.98;letter-spacing:-.015em;
+    margin-bottom:16px;
+  }
+  h1 em{font-style:italic;color:var(--accent-deep)}
+  .thesis{
+    font-family:"Fraunces",serif;font-size:clamp(17px,4.4vw,22px);
+    font-weight:400;color:var(--ink-soft);max-width:34ch;margin-bottom:22px;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    font-family:"JetBrains Mono",monospace;font-size:11.5px;letter-spacing:.03em;
+    color:var(--ink-soft);background:var(--paper);
+    border:1px solid var(--line);border-radius:100px;
+    padding:6px 12px;white-space:nowrap;
+  }
+
+  /* ---------- PROGRESS ---------- */
+  .progress{
+    display:flex;align-items:center;gap:14px;
+    margin:26px 0 8px;
+  }
+  .track{flex:1;height:5px;background:var(--line-soft);border-radius:100px;overflow:hidden}
+  .fill{height:100%;width:0;background:var(--accent);border-radius:100px;transition:width .5s cubic-bezier(.2,.7,.2,1)}
+  .count{
+    font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--ink-soft);
+    white-space:nowrap;min-width:52px;text-align:right;
+  }
+  .reset{
+    font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--ink-faint);
+    background:none;border:none;cursor:pointer;padding:4px 2px;letter-spacing:.03em;
+    text-decoration:underline;text-underline-offset:3px;
+  }
+  .reset:hover{color:var(--accent)}
+
+  /* ---------- SPINE / BLOCS ---------- */
+  .spine{position:relative;padding-left:34px;margin-top:34px}
+  .spine::before{
+    content:"";position:absolute;left:8px;top:10px;bottom:26px;width:2px;
+    background:linear-gradient(var(--line),var(--line-soft));border-radius:2px;
+  }
+  .bloc{position:relative;margin-bottom:30px}
+  .bloc::before{ /* vertebra node */
+    content:"";position:absolute;left:-30px;top:5px;width:14px;height:14px;
+    border-radius:50%;background:var(--paper);border:2px solid var(--line);
+    transition:background .4s,border-color .4s,transform .3s;
+  }
+  .bloc.done::before{background:var(--accent);border-color:var(--accent);transform:scale(1.06)}
+  .bloc-head{margin-bottom:12px}
+  .bloc-tag{
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-faint);display:block;margin-bottom:3px;
+  }
+  .bloc-title{font-family:"Fraunces",serif;font-size:clamp(20px,5vw,25px);font-weight:500;letter-spacing:-.01em}
+
+  .card{
+    background:var(--paper);border:1px solid var(--line-soft);border-radius:14px;
+    box-shadow:var(--shadow);overflow:hidden;
+  }
+  .row{
+    display:flex;align-items:flex-start;gap:13px;
+    padding:13px 15px;cursor:pointer;
+    border-top:1px solid var(--line-soft);
+    transition:background .18s;user-select:none;
+  }
+  .row:first-child{border-top:none}
+  .row:hover{background:#F1F5F3}
+  .row:active{background:#E9F0ED}
+  .box{
+    flex:none;width:20px;height:20px;margin-top:1px;border-radius:6px;
+    border:2px solid var(--line);background:#fff;
+    display:grid;place-items:center;transition:.2s;
+  }
+  .box svg{width:12px;height:12px;stroke:#fff;stroke-width:3;fill:none;
+    stroke-linecap:round;stroke-linejoin:round;
+    stroke-dasharray:20;stroke-dashoffset:20;transition:stroke-dashoffset .25s;}
+  .row.checked .box{background:var(--accent);border-color:var(--accent)}
+  .row.checked .box svg{stroke-dashoffset:0}
+  .ex-name{font-size:15.5px;font-weight:500;color:var(--ink);transition:.2s}
+  .ex-cue{font-size:13px;color:var(--ink-soft);margin-top:2px}
+  .dose{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--accent);margin-top:5px;letter-spacing:.01em}
+  .row.checked .dose{color:var(--ink-faint)}
+  .startnote{font-size:12.5px;color:var(--ink-soft);line-height:1.5;margin-top:16px;border-left:2px solid var(--accent-soft);padding-left:12px}
+  .startnote b{color:var(--accent-deep);font-weight:600}
+  .row.checked .ex-name{color:var(--ink-faint);text-decoration:line-through;text-decoration-color:var(--line)}
+  .row.checked .ex-cue{color:var(--ink-faint)}
+
+  /* ---------- PLANCHER ---------- */
+  .floor{
+    margin:38px 0 14px;background:var(--amber-soft);
+    border:1px solid #E4D3AE;border-radius:14px;padding:20px 20px 22px;
+  }
+  .floor-tag{
+    font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--amber);font-weight:500;margin-bottom:8px;
+  }
+  .floor h3{font-family:"Fraunces",serif;font-weight:500;font-size:19px;margin-bottom:6px;color:var(--ink)}
+  .floor p{font-size:14px;color:var(--ink-soft);margin-bottom:14px}
+  .floor ul{list-style:none;display:flex;flex-direction:column;gap:7px}
+  .floor li{
+    font-size:14.5px;font-weight:500;padding-left:20px;position:relative;color:var(--ink);
+  }
+  .floor li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;
+    border-radius:50%;background:var(--amber)}
+  .floor .motto{
+    margin-top:16px;font-family:"Fraunces",serif;font-style:italic;
+    font-size:15px;color:var(--amber);font-weight:400;
+  }
+
+  /* ---------- FOOTER NOTE ---------- */
+  .aside{
+    margin-top:26px;padding:16px 18px;border:1px dashed var(--line);
+    border-radius:12px;background:transparent;
+  }
+  .aside b{font-weight:600}
+  .aside-tag{
+    font-family:"JetBrains Mono",monospace;font-size:10.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--ink-faint);display:block;margin-bottom:6px;
+  }
+  .aside p{font-size:13.5px;color:var(--ink-soft)}
+  .credit{
+    margin-top:40px;text-align:center;font-family:"JetBrains Mono",monospace;
+    font-size:11px;color:var(--ink-faint);letter-spacing:.04em;
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important}
+    .bloc,.floor,.aside{opacity:1!important;transform:none!important}
+  }
+
+  /* load reveal */
+  .bloc,.floor,.aside{opacity:0;transform:translateY(10px);animation:rise .6s cubic-bezier(.2,.7,.2,1) forwards}
+  .bloc:nth-child(1){animation-delay:.05s}.bloc:nth-child(2){animation-delay:.12s}
+  .bloc:nth-child(3){animation-delay:.19s}.bloc:nth-child(4){animation-delay:.26s}
+  .floor{animation-delay:.32s}.aside{animation-delay:.38s}
+  @keyframes rise{to{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="eyebrow">Protocole quotidien · v2</div>
+    <h1>Routine <em>matinale</em></h1>
+    <p class="thesis">Réveiller le corps sans le fatiguer. Posture, stabilité, coût nerveux nul.</p>
+    <div class="chips">
+      <span class="chip">~25 min</span>
+      <span class="chip">tous les jours</span>
+      <span class="chip">jamais à l'échec</span>
+      <span class="chip">entretien, pas développement</span>
+    </div>
+
+    <div class="progress">
+      <div class="track"><div class="fill" id="fill"></div></div>
+      <div class="count" id="count">0 / 15</div>
+    </div>
+    <div style="text-align:right"><button class="reset" id="reset">réinitialiser le jour</button></div>
+    <p class="startnote"><b>Repères de départ</b>, le temps de caler la routine — pas des cibles. Un seul passage suffit. La qualité prime sur le compte ; les mauvais jours, le plancher suffit.</p>
+  </header>
+
+  <main class="spine" id="spine">
+
+    <section class="bloc" data-bloc>
+      <div class="bloc-head">
+        <span class="bloc-tag">Bloc 0 · Mobilité · mise en route</span>
+        <div class="bloc-title">Ouvrir</div>
+      </div>
+      <div class="card">
+        <div class="row"><span class="box"></span><div><div class="ex-name">Cat-cow</div><div class="ex-cue">Mobilité du rachis, segment par segment.</div><div class="dose">8–10 cycles lents</div></div></div>
+        <div class="row"><span class="box"></span><div><div class="ex-name">Wall angels</div><div class="ex-cue">Ouvrir le thoracique et les scapulas.</div><div class="dose">8–10 montées lentes</div></div></div>
+      </div>
+    </section>
+
+    <section class="bloc" data-bloc>
+      <div class="bloc-head">
+        <span class="bloc-tag">Bloc 1 · Sol · coût nerveux nul</span>
+        <div class="bloc-title">Réveil profond &amp; posture</div>
+      </div>
+      <div class="card">
+        <div class="row"><span class="box"></span><div><div class="ex-name">Chin nod</div><div class="ex-cue">À vide. Menton qui rentre, sans SCM ni trapèzes hauts.</div><div class="dose">8–10 × · tenus 2–3 s</div></div></div>
+        <div class="row"><span class="box"></span><div><div class="ex-name">Coiffe des rotateurs</div><div class="ex-cue">Rotation externe, élastique léger, lent. On ré-éduque.</div><div class="dose">12–15 / côté · lent</div></div></div>
+        <div class="row"><span class="box"></span><div><div class="ex-name">Dead bug</div><div class="ex-cue">Anti-extension. Bas du dos collé au sol.</div><div class="dose">6–8 / côté</div></div></div>
+        <div class="row"><span class="box"></span><div><div class="ex-name">Pallof</div><div class="ex-cue">Anti-rotation, les deux côtés. Tenir 10–20 s, de face.</div><div class="dose">10–20 s · 2–3× / côté</div></div></div>
+        <div class="row"><span class="box"></span><div><div class="ex-name">Side plank</div><div class="ex-cue">Anti-inclinaison latérale, les deux côtés. Bassin haut.</div><div class="dose">20–30 s / côté</div></div></div>
+        <div class="row"><span class="box"></span><div><div class="ex-name">Travail du pied</div><div class="ex-cue">Short foot, orteils, mollet sur cale. Préventif.</div><div class="dose">short foot 8–10 (3–5 s) · unipodal 20–30 s</div></div></div>
+      </div>
+    </section>
+
+    <section class="bloc" data-bloc>
+      <div class="bloc-head">
+        <span class="bloc-tag">Bloc 2 · Élastique</span>
+        <div class="bloc-title">Posture, haut du corps</div>
+      </div>
+      <div class="card">
+        <div class="row"><span class="box"></span><div><div class="ex-name">Face pull</div><div class="ex-cue">Léger, lent, long. Grooming postural, pas une séance dure.</div><div class="dose">15–20 lentes · 2 passages</div></div></div>
+        <div class="row"><span class="box"></span><div><div class="ex-name">Écarté rhomboïdes</div><div class="ex-cue">Rétraction scapulaire maintenue tout du long.</div><div class="dose">12–15 · rétraction 2 s</div></div></div>
+        <div class="row"><span class="box"></span><div><div class="ex-name">Serratus punch</div><div class="ex-cue">Dentelé antérieur : ce qui désenroule vraiment l'épaule.</div><div class="dose">12–15</div></div></div>
+        <div class="row"><span class="box"></span><div><div class="ex-name">Doorway pec stretch</div><div class="ex-cue">Étirer le pec court — pas le renforcer.</div><div class="dose">30–45 s / côté</div></div></div>
+      </div>
+    </section>
+
+    <section class="bloc" data-bloc>
+      <div class="bloc-head">
+        <span class="bloc-tag">Bloc 3 · Sol d'abord · anti-valgus</span>
+        <div class="bloc-title">Stabilité hanche / genou</div>
+      </div>
+      <div class="card">
+        <div class="row"><span class="box"></span><div><div class="ex-name">Mini-band — marche latérale</div><div class="ex-cue">Moyen fessier contre l'effondrement du genou.</div><div class="dose">10–12 pas / direction</div></div></div>
+        <div class="row"><span class="box"></span><div><div class="ex-name">Glute bridge unilatéral</div><div class="ex-cue">Grand fessier, correction des asymétries.</div><div class="dose">8–12 / côté · tenu 1–2 s</div></div></div>
+        <div class="row"><span class="box"></span><div><div class="ex-name">Équilibre unipodal</div><div class="ex-cue">Chaîne cheville → hanche. Coussins plus tard.</div><div class="dose">20–30 s / pied</div></div></div>
+      </div>
+    </section>
+
+  </main>
+
+  <section class="floor">
+    <div class="floor-tag">Plancher de réussite</div>
+    <h3>Les jours sans temps ni énergie</h3>
+    <p>Trois mouvements suffisent — un par front.</p>
+    <ul>
+      <li>Short foot / unipodal <span style="color:var(--ink-faint);font-weight:400">— le pied</span></li>
+      <li>Face pull élastique <span style="color:var(--ink-faint);font-weight:400">— la posture</span></li>
+      <li>Mini-band marche latérale <span style="color:var(--ink-faint);font-weight:400">— le genou</span></li>
+    </ul>
+    <div class="motto">La cohérence tenue vaut mieux que le plafond abandonné.</div>
+  </section>
+
+  <section class="aside">
+    <span class="aside-tag">Séparé · ne pas fusionner</span>
+    <p><b>Cohérence cardiaque — 5 min, post-travail.</b> Assis, sans matériel. Rituel de transition fin de journée : sa valeur est dans le timing, pas dans le geste. Ne pas la déplacer le matin.</p>
+  </section>
+
+  <div class="credit">entretien &gt; développement · le développement appartient au split</div>
+
+</div>
+
+<script>
+  const TICK = '<svg viewBox="0 0 24 24"><polyline points="4 12 10 18 20 6"/></svg>';
+  document.querySelectorAll('.box').forEach(b=>{ b.innerHTML=TICK; });
+
+  const KEY='routine-matinale-v2';
+  const rows=[...document.querySelectorAll('.row')];
+  const fill=document.getElementById('fill');
+  const count=document.getElementById('count');
+  const total=rows.length;
+
+  function load(){
+    try{ return JSON.parse(localStorage.getItem(KEY))||{}; }catch(e){ return {}; }
+  }
+  function save(state){
+    try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+  }
+  let state=load();
+
+  function render(){
+    let done=0;
+    rows.forEach((r,i)=>{
+      const on=!!state[i];
+      r.classList.toggle('checked',on);
+      if(on)done++;
+    });
+    document.querySelectorAll('[data-bloc]').forEach(sec=>{
+      const rs=[...sec.querySelectorAll('.row')];
+      sec.classList.toggle('done', rs.length>0 && rs.every(r=>r.classList.contains('checked')));
+    });
+    count.textContent=done+' / '+total;
+    fill.style.width=(done/total*100)+'%';
+  }
+
+  rows.forEach((r,i)=>{
+    r.addEventListener('click',()=>{
+      state[i]=!state[i];
+      save(state);
+      render();
+    });
+  });
+
+  document.getElementById('reset').addEventListener('click',()=>{
+    state={};save(state);render();
+  });
+
+  render();
+</script>
+</body>
+</html>
